@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:weather_app_flutter/app/data/utils/styles.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -8,24 +9,113 @@ class HomeView extends GetView<HomeController> {
     return Obx(() {
       return SafeArea(
         child: Scaffold(
-          body: controller.isLoading.isTrue
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : Column(
-                  children: [
-                    Text(
-                      controller.currentAddress.value,
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    controller.weatherModel.value != null
-                        ? Text(
-                            controller.weatherModel.value!.toJson().toString(),
-                            style: TextStyle(fontSize: 20),
-                          )
-                        : const SizedBox(),
-                  ],
-                ),
+          body: Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: Stack(
+                children: [
+                  Image.asset(
+                    'assets/images/home_background.png',
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    fit: BoxFit.cover,
+                  ),
+                  controller.isLoading.isTrue
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : Container(
+                          height: MediaQuery.of(context).size.height,
+                          width: MediaQuery.of(context).size.width,
+                          color: Colors.black.withOpacity(0.3),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 20,
+                          ),
+                          child: SingleChildScrollView(
+                            physics: const BouncingScrollPhysics(),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                if (controller
+                                    .currentAddress.value.isNotEmpty) ...[
+                                  const Text(
+                                    "Your address:",
+                                    style: titleTextStyle,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    controller.currentAddress.value,
+                                    style: contentTextStyle,
+                                  ),
+                                ],
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                if (controller.weatherModel.value != null) ...[
+                                  const Text(
+                                    "Weather Detail:",
+                                    style: titleTextStyle,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Text(
+                                        "Temperature: ",
+                                        style: titleTextStyle,
+                                      ),
+                                      Text(
+                                        "${controller.weatherModel.value!.currentWeather!.temperature!} °C",
+                                        style: contentTextStyle,
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Text(
+                                        "Wind Speed: ",
+                                        style: titleTextStyle,
+                                      ),
+                                      Text(
+                                        "${controller.weatherModel.value!
+                                            .currentWeather!.windspeed!} km/h",
+                                        style: contentTextStyle,
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Text(
+                                        "Wind Direction: ",
+                                        style: titleTextStyle,
+                                      ),
+                                      Text(
+                                        controller.weatherModel.value!
+                                            .currentWeather!.winddirection!
+                                            .toString(),
+                                        style: contentTextStyle,
+                                      ),
+                                    ],
+                                  ),
+                                ]
+                              ],
+                            ),
+                          ),
+                        ),
+                ],
+              )),
         ),
       );
     });
