@@ -1,10 +1,20 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:weather_app_flutter/app/data/models/weather_model.dart';
+import 'package:weather_app_flutter/app/modules/home/repository/home_repository.dart';
 
 class HomeController extends GetxController {
   RxString currentAddress = "".obs;
+
+  RxBool isLoading = false.obs;
+
+  Rxn<WeatherModel> weatherModel = Rxn<WeatherModel>();
+
+  HomeRepository homeRepository = HomeRepository();
 
   @override
   void onInit() {
@@ -18,6 +28,7 @@ class HomeController extends GetxController {
   }
 
   Future<void> getCurrentPosition() async {
+    isLoading.value = true;
     bool hasMapPermission = await checkMapPermission(Get.context!);
     if (hasMapPermission) {
       try {
@@ -25,6 +36,7 @@ class HomeController extends GetxController {
             desiredAccuracy: LocationAccuracy.high);
 
         final Position currentPosition = position;
+        await getCurrentWeatherData(currentPosition);
 
         await placemarkFromCoordinates(
                 currentPosition.latitude, currentPosition.longitude)
@@ -36,6 +48,7 @@ class HomeController extends GetxController {
           }
         });
       } catch (e) {
+        isLoading.value = false;
         ScaffoldMessenger.of(Get.context!).showSnackBar(
           const SnackBar(
             content: Text('Something went wrong'),
@@ -72,5 +85,21 @@ class HomeController extends GetxController {
       return false;
     }
     return true;
+  }
+
+  Future getCurrentWeatherData(Position position) async {
+    try {
+      final String latitude = position.latitude.toString();
+      final String longitude = position.longitude.toString();
+      final WeatherModel? response = await homeRepository.getCurrentWeatherData(
+          lat: latitude, long: longitude);
+      if (response != null) {
+        weatherModel.value = response;
+      }
+
+      isLoading.value = false;
+    } catch (e) {
+      isLoading.value = false;
+    }
   }
 }
