@@ -15,7 +15,7 @@ class HomeView extends GetView<HomeController> {
               child: Stack(
                 children: [
                   Image.asset(
-                    'assets/images/home_background.png',
+                    'assets/images/home_background.jpeg',
                     height: MediaQuery.of(context).size.height,
                     width: MediaQuery.of(context).size.width,
                     fit: BoxFit.cover,
