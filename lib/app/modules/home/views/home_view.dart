@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:weather_app_flutter/app/data/utils/styles.dart';
+import 'package:weather_app_flutter/app/modules/home/widgets/background_image.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -9,17 +10,12 @@ class HomeView extends GetView<HomeController> {
     return Obx(() {
       return SafeArea(
         child: Scaffold(
-          body: Container(
+          body: SizedBox(
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               child: Stack(
                 children: [
-                  Image.asset(
-                    'assets/images/home_background.jpeg',
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width,
-                    fit: BoxFit.cover,
-                  ),
+                  const BackGroundImage(),
                   controller.isLoading.isTrue
                       ? const Center(
                           child: CircularProgressIndicator(),
