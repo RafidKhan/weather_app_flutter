@@ -61,6 +61,7 @@ class HomeView extends GetView<HomeController> {
                                     height: 10,
                                   ),
                                   Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       const Text(
                                         "Temperature: ",
@@ -76,6 +77,7 @@ class HomeView extends GetView<HomeController> {
                                     height: 10,
                                   ),
                                   Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       const Text(
                                         "Wind Speed: ",
@@ -92,6 +94,7 @@ class HomeView extends GetView<HomeController> {
                                     height: 10,
                                   ),
                                   Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       const Text(
                                         "Wind Direction: ",
